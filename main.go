@@ -1,6 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"strconv"
 	"syscall/js"
 )
@@ -35,9 +39,42 @@ func subtract() js.Func {
 	return myFunc
 }
 
+func request() js.Func {
+	myFunc := js.FuncOf(func(this js.Value, i []js.Value) any {
+
+		go func() {
+			req, err := http.NewRequest("GET", "https://icanhazdadjoke.com", nil)
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			req.Header.Set("Accept", "application/json")
+
+			client := &http.Client{}
+			resp, err := client.Do(req)
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			defer resp.Body.Close()
+
+			b, err := io.ReadAll(resp.Body)
+			// b, err := ioutil.ReadAll(resp.Body)  Go.1.15 and earlier
+			if err != nil {
+				log.Fatalln(err)
+			}
+
+			fmt.Println("request is", string(b))
+		}()
+		return nil
+	})
+	return myFunc
+}
+
 func registerCallbacks() {
 	js.Global().Set("add", add())
 	js.Global().Set("subtract", subtract())
+	js.Global().Set("request", request())
 }
 
 func main() {
