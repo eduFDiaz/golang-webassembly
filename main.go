@@ -65,6 +65,7 @@ func request() js.Func {
 			}
 
 			fmt.Println("request is", string(b))
+			js.Global().Get("document").Call("getElementById", i[0].String()).Set("innerHTML", string(b))
 		}()
 		return nil
 	})
