@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strconv"
 	"syscall/js"
 )
+
+var joke string
 
 func add() js.Func {
 	myFunc := js.FuncOf(func(this js.Value, i []js.Value) any {
@@ -41,7 +42,6 @@ func subtract() js.Func {
 
 func request() js.Func {
 	myFunc := js.FuncOf(func(this js.Value, i []js.Value) any {
-
 		go func() {
 			req, err := http.NewRequest("GET", "https://icanhazdadjoke.com", nil)
 			if err != nil {
@@ -64,10 +64,11 @@ func request() js.Func {
 				log.Fatalln(err)
 			}
 
-			fmt.Println("request is", string(b))
+			// fmt.Println("request is", string(b))
 			js.Global().Get("document").Call("getElementById", i[0].String()).Set("innerHTML", string(b))
+			joke = string(b)
 		}()
-		return nil
+		return joke
 	})
 	return myFunc
 }
