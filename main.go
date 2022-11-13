@@ -12,32 +12,27 @@ var joke string
 
 func add() js.Func {
 	myFunc := js.FuncOf(func(this js.Value, i []js.Value) any {
-		value1 := js.Global().Get("document").Call("getElementById", i[0].String()).Get("value").String()
-		value2 := js.Global().Get("document").Call("getElementById", i[1].String()).Get("value").String()
 
-		int1, _ := strconv.Atoi(value1)
-		int2, _ := strconv.Atoi(value2)
-
-		js.Global().Get("document").Call("getElementById", i[2].String()).Set("value", int1+int2)
+		int1, _ := strconv.Atoi(i[0].String())
+		int2, _ := strconv.Atoi(i[1].String())
 		println("Sum is", int1+int2)
-		return nil
+		return int1 + int2
 	})
 	return myFunc
 }
 
-func subtract() js.Func {
+func factorial_wasm() js.Func {
 	myFunc := js.FuncOf(func(this js.Value, i []js.Value) any {
-		value1 := js.Global().Get("document").Call("getElementById", i[0].String()).Get("value").String()
-		value2 := js.Global().Get("document").Call("getElementById", i[1].String()).Get("value").String()
-
-		int1, _ := strconv.Atoi(value1)
-		int2, _ := strconv.Atoi(value2)
-
-		js.Global().Get("document").Call("getElementById", i[2].String()).Set("value", int1-int2)
-		println("Subtract is", int1-int2)
-		return nil
+		return factorial(strconv.Atoi(i[0].String()))
 	})
 	return myFunc
+}
+
+func factorial(a int) int {
+	if a <= 1 {
+		return a
+	}
+	return a * factorial_wasm(a-1)
 }
 
 func request() js.Func {
@@ -75,7 +70,7 @@ func request() js.Func {
 
 func registerCallbacks() {
 	js.Global().Set("add", add())
-	js.Global().Set("subtract", subtract())
+	js.Global().Set("factorial_wasm", factorial_wasm())
 	js.Global().Set("request", request())
 }
 

@@ -1,0 +1,11 @@
+span.icon-square {
+    margin: 0 auto;
+}
+
+span.icon-square:first-child {
+    margin-left: 0;
+}
+
+span.icon-square:last-child {
+    margin-right: 0;
+}

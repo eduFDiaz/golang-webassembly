@@ -1,8 +1,15 @@
+<span>
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label></mat-label>
+    <input matInput type="text" [(ngModel)]="value1" id="value1">
+  </mat-form-field>
+  <mat-form-field class="example-form-field" appearance="fill">
+    <mat-label></mat-label>
+    <input matInput type="text" [(ngModel)]="value2" id="value2">
+  </mat-form-field>
+  <button mat-raised-button (click)="add()" color="primary">Add</button>
+</span>
 <mat-form-field class="example-form-field" appearance="fill">
-  <mat-label>Clearable input</mat-label>
-  <input matInput type="text" [(ngModel)]="value">
-  <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-    <mat-icon>close</mat-icon>
-  </button>
+  <mat-label></mat-label>
+  <input matInput type="text" [(ngModel)]="result" id="result">
 </mat-form-field>
-<button mat-raised-button color="primary">Primary</button>
